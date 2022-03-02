@@ -1,7 +1,7 @@
 import useGetTestContainers from "features/containersTable/hooks/useGetTestContainers";
 import Loading from "shared/components/Loading";
 import {
-    Button,
+    Button, Container,
     Grid,
     Paper,
     Tab,
@@ -32,80 +32,82 @@ function ContainerTable(): JSX.Element {
     const testItems = testData?.items ?? []
     const devItems = devData?.items ?? []
     return (
-        <Grid container>
-            <Grid item xs={6}>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>
-                                    Test
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {testItems?.map((item: any) => {
-                                const kubernetes = parseJson(item.metadata["annotations"]["kubectl.kubernetes.io/last-applied-configuration"])
-                                const containers = kubernetes?.["spec"]["template"]["spec"]["containers"]
-                                return (
-                                    <TableRow>
-                                        <TableCell>
-                                            Name: {item.metadata.name}
-                                            <br/>
-                                            {containers?.map((container) => {
-                                              return (`Container: ${container.image}`)
-                                            })}
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                            })
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+        <Container>
+            <Grid container>
+                <Grid item xs={6}>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>
+                                        Test
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {testItems?.map((item: any) => {
+                                    const kubernetes = parseJson(item.metadata["annotations"]["kubectl.kubernetes.io/last-applied-configuration"])
+                                    const containers = kubernetes?.["spec"]["template"]["spec"]["containers"]
+                                    return (
+                                        <TableRow>
+                                            <TableCell>
+                                                Name: {item.metadata.name}
+                                                <br/>
+                                                {containers?.map((container) => {
+                                                  return (`Container: ${container.image}`)
+                                                })}
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                                }
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+                <Grid item xs={6}>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>
+                                        Dev
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {devItems?.map((item: any) => {
+                                    const kubernetes = parseJson(item.metadata["annotations"]["kubectl.kubernetes.io/last-applied-configuration"])
+                                    const containers = kubernetes?.["spec"]["template"]["spec"]["containers"]
+                                    return (
+                                        <TableRow>
+                                            <TableCell>
+                                                Name: {item.metadata.name}
+                                                <br/>
+                                                {containers?.map((container) => {
+                                                    return (`Container: ${container.image}`)
+                                                })}
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                                }
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+                <Grid item xs={6}>
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            refetchDevData()
+                            refetchTestData()
+                        }}>
+                        Refetch Data
+                    </Button>
+                </Grid>
             </Grid>
-            <Grid item xs={6}>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>
-                                    Dev
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {devItems?.map((item: any) => {
-                                const kubernetes = parseJson(item.metadata["annotations"]["kubectl.kubernetes.io/last-applied-configuration"])
-                                const containers = kubernetes?.["spec"]["template"]["spec"]["containers"]
-                                return (
-                                    <TableRow>
-                                        <TableCell>
-                                            Name: {item.metadata.name}
-                                            <br/>
-                                            {containers?.map((container) => {
-                                                return (`Container: ${container.image}`)
-                                            })}
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                            })
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-            <Grid item xs={6}>
-                <Button
-                    variant="contained"
-                    onClick={() => {
-                        refetchDevData()
-                        refetchTestData()
-                    }}>
-                    Refetch Data
-                </Button>
-            </Grid>
-        </Grid>
+        </Container>
     )
 }
 
